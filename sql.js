@@ -23,15 +23,12 @@ if (process.env.NODE_ENV === 'production') {
 // and handle dropped or expired connections automatically.
 let mysqlPool
 
-exports.mysqlDemo = async (req, res) => {
-  // Initialize the pool lazily, in case SQL access isn't needed for this
-  // GCF instance. Doing so minimizes the number of active SQL connections,
-  // which helps keep your GCF instances under SQL connection limits. 
+exports.insertData = (data) => {
   if (!mysqlPool) {
     mysqlPool = mysql.createPool(mysqlConfig)
   }
 
-  mysqlPool.query('DESC cards', (err, results) => {
+  mysqlPool.query('INSERT INTO cards SET ?', data, (err, results) => {
     if (err) {
       console.error(err)
       res.status(500).send(err)
@@ -39,7 +36,4 @@ exports.mysqlDemo = async (req, res) => {
       res.send(JSON.stringify(results))
     }
   })
-
-  // Close any SQL resources that were declared inside this function.
-  // Keep any declared in global scope (e.g. mysqlPool) for later reuse.
-}
+} 
