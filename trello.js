@@ -75,7 +75,7 @@ exports.getUpdatedCardData = async () => {
   let data = []
 
   for (const action of actions) {
-    if (!isActiveData(action.date, 5000)) {
+    if (!isActiveData(action.date, 60000)) {
       console.log('Data collection has done.')
       return data
     }

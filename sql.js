@@ -8,11 +8,13 @@ const dbUser = process.env.SQL_USER
 const dbPassword = process.env.SQL_PASSWORD
 const dbName = process.env.SQL_HOME
 
+
 const mysqlConfig = {
   connectionLimit: 1,
   user: dbUser,
   password: dbPassword,
   database: dbName,
+  charset: 'UTF8MB4_GENERAL_CI',
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -30,10 +32,8 @@ exports.insertData = (data) => {
 
   mysqlPool.query('INSERT INTO cards SET ?', data, (err, results) => {
     if (err) {
-      console.error(err)
-      res.status(500).send(err)
-    } else {
-      res.send(JSON.stringify(results))
+      throw new Error(err)
     }
+    console.log(results)
   })
-} 
+}
